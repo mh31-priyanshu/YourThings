@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:yourthingss/Provider/signuppageprovider.dart';
 import 'package:yourthingss/entry/authentication.dart';
 import 'package:yourthingss/entry/signupuser.dart';
 import 'package:yourthingss/homescreen/mainscreen.dart';
@@ -208,7 +210,10 @@ class _LoginPageState extends State<LoginPage> {
                         ..onTap =(){
                           Navigator.pushReplacement(
                             context, 
-                            MaterialPageRoute(builder: (context)=>const SignupPage())
+                            MaterialPageRoute(builder: (context)=>ChangeNotifierProvider(
+                              create: (BuildContext context) => SignUpPageProvider(),
+                              child: const SignupPage(),
+                            ))
                           );
                       },
                       style: const TextStyle(
