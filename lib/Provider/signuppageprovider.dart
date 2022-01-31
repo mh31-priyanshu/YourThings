@@ -7,6 +7,7 @@ class SignUpPageProvider with ChangeNotifier{
   String? emailError = "";
   String? pwdError = "";
   String? cpwdError = "";
+  String? errormsg = "";
   usernameErrorMsg (String name){
     if(name.length<4){
       usernameError = "Enter Name upto 4 characters";
@@ -44,7 +45,6 @@ class SignUpPageProvider with ChangeNotifier{
       notifyListeners();
     }
   }
-  String? errormsg = "";
   bool validate (String name,String email, String pwd, String cpwd){
     bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
     if(name.length<4 || emailValid==false || pwd.length<8 || pwd!=cpwd){

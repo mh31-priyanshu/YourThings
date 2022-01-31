@@ -47,7 +47,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       ),
                       const SizedBox(height: 5,),
                       Text(
-                        userModel.email,
+                        userModel.medium,
                         style: const TextStyle(
                           color: Colors.white60,
                           fontSize: 13,

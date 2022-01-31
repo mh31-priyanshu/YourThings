@@ -54,15 +54,13 @@ class _UserauthenticationState extends State<Userauthentication> {
 
 class UserModel{
   final String fullName; 
-  final String email; 
-  final String password; 
+  final String medium;
   final String useruid;
   final int totalthings;
   final int totalthingsdone;
   
   UserModel({
-    required this.email,
-    required this.password,
+    required this.medium,
     required this.useruid,
     required this.fullName,
     required this.totalthings,
@@ -70,8 +68,7 @@ class UserModel{
   });
 
   factory UserModel.fromDocument(DocumentSnapshot doc) {return UserModel(
-    email: doc['email'],
-    password: doc['password'],
+    medium: doc['medium'],
     useruid: doc['uid'],
     fullName: doc['name'],
     totalthings : doc['totalthings'],
@@ -97,13 +94,12 @@ class DatabaseServices{
   
   final CollectionReference usersCollection = FirebaseFirestore.instance.collection('Users');
 
-  Future updateUserData( String name,String email,String password,String uid ) async{
+  Future updateUserData( String name,String medium,String uid ) async{
     return await usersCollection
     .doc(uid)
     .set({
       'name' : name,
-      'email' : email,
-      'password' : password,
+      'medium' : medium,
       'uid' : uid,
       'totalthings' : 0,
       'totalthingsdone': 0

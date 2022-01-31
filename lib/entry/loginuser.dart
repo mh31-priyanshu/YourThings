@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yourthingss/Provider/signuppageprovider.dart';
 import 'package:yourthingss/entry/authentication.dart';
+import 'package:yourthingss/entry/phoneauth/loginphone.dart';
 import 'package:yourthingss/entry/signupuser.dart';
 import 'package:yourthingss/homescreen/mainscreen.dart';
 import 'package:yourthingss/main.dart';
@@ -136,17 +137,42 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 15, 0, 20),
-                      child: const Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                          color: Color(0xff7f7f7f),
-                          fontSize: 13,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 15, 0, 20),
+                          child: RichText(
+                            text: TextSpan(
+                                text: " Login with phone",
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap =(){
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(builder: (context)=>ChangeNotifierProvider(
+                                          create: (BuildContext context) => SignUpPageProvider(),
+                                          child: const LoginPhonePage(),
+                                        ))
+                                    );
+                                  },
+                                style: const TextStyle(
+                                  color: Color(0xff7f7f7f),
+                                  fontSize: 13,
+                                )
+                            ),
+                          ),
                         ),
-                        textAlign: TextAlign.right,
-                      ),
-                      width: double.infinity,
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 15, 0, 20),
+                          child: const Text(
+                            "Forgot Password?",
+                            style: TextStyle(
+                              color: Color(0xff7f7f7f),
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     ElevatedButton(
                       onPressed: () async{

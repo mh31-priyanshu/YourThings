@@ -332,7 +332,7 @@ class _SignupPageState extends State<SignupPage> {
                                                 .createUserWithEmailAndPassword(
                                                 email: emailInputController.text,
                                                 password: pwdInputController.text);
-                                            await DatabaseServices().updateUserData(nameInputController.text, emailInputController.text, pwdInputController.text,user.user!.uid.toString(),);
+                                            await DatabaseServices().updateUserData(nameInputController.text, emailInputController.text,user.user!.uid.toString());
                                             await getCurrentUserDataFunction();
                                             Navigator.pushReplacement(context,
                                                 MaterialPageRoute(builder: (context)=>MainScreen())
