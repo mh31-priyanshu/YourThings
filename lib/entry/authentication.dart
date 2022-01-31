@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:yourthingss/Provider/loginpageprovider.dart';
 import 'package:yourthingss/entry/loginuser.dart';
 import 'package:yourthingss/homescreen/homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,7 +22,10 @@ class _UserauthenticationState extends State<Userauthentication> {
       .userChanges()
         .listen((User? user) async {
           if (user == null) {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginPage()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ChangeNotifierProvider(
+              create: (_)=> LogInPageProvider(),
+              child: const LoginPage(),
+            )));
           } else {
             await getCurrentUserDataFunction();
             Navigator.pushReplacement(context, 

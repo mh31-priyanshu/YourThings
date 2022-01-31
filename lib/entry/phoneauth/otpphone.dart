@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yourthingss/Provider/phoneloginprovider.dart';
 import 'package:yourthingss/Provider/signuppageprovider.dart';
 import 'package:yourthingss/entry/authentication.dart';
 import 'package:yourthingss/entry/loginuser.dart';
@@ -27,7 +28,7 @@ class _OTPPhonePageState extends State<OTPPhonePage> {
   @override
   Widget build(BuildContext context) {
     double widthBtn = ((MediaQuery.of(context).size.width)/2)-80;
-
+    final provider = Provider.of< PhoneLoginProvider >(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       // ignore: avoid_unnecessary_containers
@@ -100,19 +101,12 @@ class _OTPPhonePageState extends State<OTPPhonePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          margin: const EdgeInsets.fromLTRB(0, 20, 0, 40),
+                          margin: const EdgeInsets.fromLTRB(0, 20, 0, 30),
                           child: RichText(
                             text: TextSpan(
                                 text: " Didn't received the OTP?",
                                 recognizer: TapGestureRecognizer()
                                   ..onTap =(){
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(builder: (context)=>ChangeNotifierProvider(
-                                          create: (BuildContext context) => SignUpPageProvider(),
-                                          child: const LoginPage(),
-                                        ))
-                                    );
                                   },
                                 style: const TextStyle(
                                   color: Color(0xff7f7f7f),
@@ -122,6 +116,16 @@ class _OTPPhonePageState extends State<OTPPhonePage> {
                           ),
                         ),
                       ],
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      child:Text(
+                        provider.otperror.toString(),
+                        style: const TextStyle(
+                          color: Color(0xffDC714B),
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
                     ElevatedButton(
                       onPressed: () async {
@@ -143,6 +147,7 @@ class _OTPPhonePageState extends State<OTPPhonePage> {
                                   }
                                 }
                         }catch(e){
+                          provider.otpErrorMsg(e.toString());
                           print(e);
                         }
                       },

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yourthingss/Provider/loginpageprovider.dart';
 import 'package:yourthingss/Provider/signuppageprovider.dart';
 import 'package:yourthingss/entry/authentication.dart';
 import 'package:yourthingss/entry/loginuser.dart';
@@ -379,9 +380,10 @@ class _SignupPageState extends State<SignupPage> {
                                 text: "  Sign In",
                                 recognizer: TapGestureRecognizer()
                                   ..onTap =(){
-                                    Navigator.pushReplacement(context,
-                                        MaterialPageRoute(builder: (context)=>const LoginPage())
-                                    );
+                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ChangeNotifierProvider(
+                                      create: (_)=> LogInPageProvider(),
+                                      child: const LoginPage(),
+                                    )));
                                   },
                                 style: const TextStyle(
                                   color: Color(0xff9f9f9f),

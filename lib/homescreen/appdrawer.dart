@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:yourthingss/Provider/loginpageprovider.dart';
 import 'package:yourthingss/entry/authentication.dart';
 import 'package:yourthingss/entry/loginuser.dart';
 import 'package:yourthingss/homescreen/mainscreen.dart';
@@ -169,7 +171,10 @@ class _AppDrawerState extends State<AppDrawer> {
                 await signOut();
                 Navigator.pushReplacement(
                     context, 
-                    MaterialPageRoute(builder: (context)=>const LoginPage())
+                    MaterialPageRoute(builder: (context)=>ChangeNotifierProvider(
+                      create: (_)=> LogInPageProvider(),
+                      child: const LoginPage(),
+                    ))
                 );
               },
               child: Row(

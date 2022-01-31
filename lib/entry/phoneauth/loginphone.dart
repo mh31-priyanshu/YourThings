@@ -4,7 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yourthingss/Provider/phoneotpprovider.dart';
+import 'package:yourthingss/Provider/loginpageprovider.dart';
+import 'package:yourthingss/Provider/phoneloginprovider.dart';
 import 'package:yourthingss/Provider/signuppageprovider.dart';
 import 'package:yourthingss/entry/authentication.dart';
 import 'package:yourthingss/entry/loginuser.dart';
@@ -24,6 +25,7 @@ class _LoginPhonePageState extends State<LoginPhonePage> {
   TextEditingController phoneInputController =  TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<PhoneLoginProvider>(context);
     double widthBtn = ((MediaQuery.of(context).size.width)/2)-80;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -94,10 +96,9 @@ class _LoginPhonePageState extends State<LoginPhonePage> {
                     ),
 
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          margin: const EdgeInsets.fromLTRB(0, 20, 0, 40),
+                          margin: const EdgeInsets.fromLTRB(0, 18, 0, 30),
                           child: RichText(
                             text: TextSpan(
                                 text: " Login with email",
@@ -106,7 +107,7 @@ class _LoginPhonePageState extends State<LoginPhonePage> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(builder: (context)=>ChangeNotifierProvider(
-                                          create: (BuildContext context) => SignUpPageProvider(),
+                                          create: (BuildContext context) => LogInPageProvider(),
                                           child: const LoginPage(),
                                         ))
                                     );
@@ -118,30 +119,32 @@ class _LoginPhonePageState extends State<LoginPhonePage> {
                             ),
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(0, 20, 0, 40),
-                          child: const Text(
-                            "Forgot Password?",
-                            style: TextStyle(
-                              color: Color(0xff7f7f7f),
-                              fontSize: 13,
-                            ),
-                          ),
-                        ),
                       ],
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                      child:Text(
+                        provider.phoneerror.toString(),
+                        style: const TextStyle(
+                          color: Color(0xffDC714B),
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
                     SizedBox(
                       width: (widthBtn*2)+80,
                       height: 40,
                       child: OutlinedButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context)=>ChangeNotifierProvider(
-                                create: (_)=>PhoneOTPProvider(),
-                                child: OTPPhonePage(PhoneNumber: phoneInputController.text),
-                              ))
-                          );
+                          if(provider.phoneErrorMsg(phoneInputController.text)){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>ChangeNotifierProvider(
+                                  create: (_)=> PhoneLoginProvider(),
+                                  child: OTPPhonePage(PhoneNumber: phoneInputController.text,),
+                                )),
+                            );
+                          }
                         },
                           child: const Text(
                             "Get OTP",

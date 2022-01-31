@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yourthingss/Provider/loginpageprovider.dart';
+import 'package:yourthingss/Provider/phoneloginprovider.dart';
 import 'package:yourthingss/Provider/signuppageprovider.dart';
 import 'package:yourthingss/entry/authentication.dart';
 import 'package:yourthingss/entry/phoneauth/loginphone.dart';
@@ -26,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController pwdInputController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of< LogInPageProvider >(context);
     double widthBtn = ((MediaQuery.of(context).size.width)/2)-80;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -54,17 +57,32 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children:  [
                     // ignore: avoid_unnecessary_containers
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 40, 0, 7),
-                      child: const Text(
-                        "Email",
-                        style: TextStyle(
-                          color: Color(0xff7f7f7f),
-                          fontSize: 13,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 40, 0, 7),
+                          child: const Text(
+                            "Email",
+                            style: TextStyle(
+                              color: Color(0xff7f7f7f),
+                              fontSize: 13,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
                         ),
-                        textAlign: TextAlign.left,
-                      ),
-                      width: double.infinity,
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 40, 5, 7),
+                          child: Text(
+                            provider.emailError.toString(),
+                            style: const TextStyle(
+                              color: Color(0xffDC714B),
+                              fontSize: 13,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
                     ),
                     // ignore: avoid_unnecessary_containers
                     Container(
@@ -91,20 +109,38 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(
                             color: Color(0xff7f7f7f)
                           ),
+                          onChanged: (value){
+                            provider.emailErrorMsg(value);
+                          },
                         ),
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 30, 0, 7),
-                      child: const Text(
-                        "Password",
-                        style: TextStyle(
-                          color: Color(0xff7f7f7f),
-                          fontSize: 13, 
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 30, 0, 7),
+                          child: const Text(
+                            "Password",
+                            style: TextStyle(
+                              color: Color(0xff7f7f7f),
+                              fontSize: 13,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
                         ),
-                        textAlign: TextAlign.left,
-                      ),
-                      width: double.infinity,
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 30, 5, 7),
+                          child: Text(
+                            provider.pwdError.toString(),
+                            style: const TextStyle(
+                              color: Color(0xffDC714B),
+                              fontSize: 13,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
                     ),
                     // ignore: avoid_unnecessary_containers
                     Container(
@@ -134,6 +170,9 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(
                             color: Color(0xff7f7f7f)
                           ),
+                          onChanged: (value){
+                            provider.pwdErrorMsg(value);
+                          },
                         ),
                       ),
                     ),
@@ -150,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(builder: (context)=>ChangeNotifierProvider(
-                                          create: (BuildContext context) => SignUpPageProvider(),
+                                          create: (BuildContext context) => PhoneLoginProvider(),
                                           child: const LoginPhonePage(),
                                         ))
                                     );
@@ -174,28 +213,51 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                          child:Text(
+                            provider.errormsg.toString(),
+                            style: const TextStyle(
+                              color: Color(0xffDC714B),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                          child:Text(
+                            provider.loginerror.toString(),
+                            style: const TextStyle(
+                              color: Color(0xffDC714B),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     ElevatedButton(
                       onPressed: () async{
-                        try{
-                          UserCredential user = await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
+                        if(provider.validate(emailInputController.text, pwdInputController.text)){
+                          try{
+                            UserCredential user = await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
                                 email: emailInputController.text,
                                 password: pwdInputController.text);
-                        await getCurrentUserDataFunction();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context)=>MainScreen())
-                          );
-                        }catch(e){
-                          // ignore: avoid_print
-                          print(e.toString());
-                          const Text(
-                            "Email or Password is incorrect",
-                            style: TextStyle(
-                              color: Colors.red
-                            ),
-                          );
+                            await getCurrentUserDataFunction();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context)=>MainScreen())
+                            );
+                          }catch(e){
+                            provider.loginerrorMsg(e.toString());
+                            // ignore: avoid_print
+                            print(e.toString());
+                          }
                         }
+
                       }, 
                       child:  Padding(
                         padding: EdgeInsets.symmetric(vertical: 12, horizontal:widthBtn),
