@@ -45,7 +45,7 @@ class LogInPageProvider with ChangeNotifier{
       notifyListeners();
       return false;
     }else if(error == emailerror){
-      loginerror = "Invalid Address";
+      loginerror = "Invalid Email Address";
       notifyListeners();
       return false;
     }else{
